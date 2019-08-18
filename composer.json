@@ -5,7 +5,7 @@
     "license": "MIT",
     "authors": [{
         "name": "Team developer GRDAR",
-        "email": "dani@grdar.es"
+        "email": "dani@grdar.com"
     }],
     "minimum-stability": "stable",
     "require-dev": {

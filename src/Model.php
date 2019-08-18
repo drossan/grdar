@@ -4,25 +4,24 @@ namespace  Grdar\core;
 
 use  Grdar\core\Database\Database as conection;
 use  Grdar\core\Pagination\Paginate;
-use  Grdar\core\Pagination\PaginateTemplate;
-use  Grdar\core\Pagination\PaginateViewMore;
 use  Grdar\core\Sorteable\Sorteable;
 
 abstract class Model
 {
     
-    private $database;
+    protected $database;
     protected $query;
-    private $result;
-    private $return;
+    protected $result;
+    protected $return;
     protected $paginate;
-    private $sort;
+    protected $sort;
 
     public function setQuery($query)
     {
         $this->query = $query.' '.$this->hasSorteable();
         $this->query();
         $this->sort = NULL;
+        return $this;
     }
     public function getQuery()
     {
@@ -42,6 +41,7 @@ abstract class Model
 		$this->database = new conection();
         $this->database->query($this->query);
         $this->database->execute();
+        return $this;
     }
 
     // Cuenta los resultados devueltos en una query()
@@ -78,15 +78,13 @@ abstract class Model
     public function paginate($tipe, $page = NULL, $layout = NULL, $limit = NULL)
     {
         $rows = $this->rowCount();
-        if($tipe == 'paginateAdvance'){
-            $paginate =  new PaginateTemplate($rows, $page, $limit, $layout);
-        }elseif($tipe == 'paginateViewMore'){
-            $paginate =  new PaginateViewMore($rows, $page, $limit, $layout);
-        }
+        
+        $paginate =  new $tipe($rows, $page, $limit, $layout);
 
         $this->paginate = $paginate->paginate();
         $this->query = $this->query.' '.$paginate;
         $this->query();
+        return $this;
     }
 
     // Sorteable
@@ -99,5 +97,6 @@ abstract class Model
     {
         $sorteable = new Sorteable($field, $order);
         $this->sort = $sorteable;
+        return $this;
     }
 }

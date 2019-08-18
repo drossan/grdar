@@ -1,7 +1,6 @@
 <?php
 namespace Grdar\core\Controllers;
 
-use Grdar\core\Views\View;
 use Grdar\core\Container;
 
 class Controller{
